@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import com.yoesuv.kmp_pickerpermission.core.route.AppRoute
 
 @Composable
 fun HomeScreen(nav: NavHostController) {
@@ -29,7 +30,9 @@ fun HomeScreen(nav: NavHostController) {
             ) {
                 AppButton(
                     text = "Gallery",
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        nav.navigate(AppRoute.Gallery)
+                    },
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
