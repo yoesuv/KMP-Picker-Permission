@@ -3,4 +3,7 @@
     <string name="open_gallery">Open Gallery</string>
     <string name="camera">Camera</string>
     <string name="open_camera">Open Camera</string>
+    <string name="file">File</string>
+    <string name="open_file">Open File</string>
+    <string name="home">Home</string>
 </resources>

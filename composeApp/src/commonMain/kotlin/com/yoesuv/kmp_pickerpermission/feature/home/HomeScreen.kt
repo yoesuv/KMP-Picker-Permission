@@ -13,13 +13,19 @@ import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import com.yoesuv.kmp_pickerpermission.core.route.AppRoute
+import kmppickerpermission.composeapp.generated.resources.Res
+import kmppickerpermission.composeapp.generated.resources.camera
+import kmppickerpermission.composeapp.generated.resources.file
+import kmppickerpermission.composeapp.generated.resources.gallery
+import kmppickerpermission.composeapp.generated.resources.home
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeScreen(nav: NavHostController) {
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Home",
+                title = stringResource(Res.string.home),
                 canBack = false
             )
         }
@@ -29,7 +35,7 @@ fun HomeScreen(nav: NavHostController) {
                 modifier = Modifier.padding(24.dp)
             ) {
                 AppButton(
-                    text = "Gallery",
+                    text = stringResource(Res.string.gallery),
                     onClick = {
                         nav.navigate(AppRoute.Gallery)
                     },
@@ -37,9 +43,17 @@ fun HomeScreen(nav: NavHostController) {
                 )
 
                 AppButton(
-                    text = "Camera",
+                    text = stringResource(Res.string.camera),
                     onClick = {
                         nav.navigate(AppRoute.Camera)
+                    },
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                AppButton(
+                    text = stringResource(Res.string.file),
+                    onClick = {
+                        nav.navigate(AppRoute.File)
                     }
                 )
             }
