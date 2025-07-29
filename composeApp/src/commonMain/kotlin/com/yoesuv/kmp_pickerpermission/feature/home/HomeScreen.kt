@@ -38,7 +38,9 @@ fun HomeScreen(nav: NavHostController) {
 
                 AppButton(
                     text = "Camera",
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        nav.navigate(AppRoute.Camera)
+                    }
                 )
             }
         }

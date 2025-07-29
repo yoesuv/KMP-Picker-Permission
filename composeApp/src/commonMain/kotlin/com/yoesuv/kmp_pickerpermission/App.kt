@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.yoesuv.kmp_pickerpermission.core.route.AppRoute
+import com.yoesuv.kmp_pickerpermission.feature.camera.CameraScreen
 import com.yoesuv.kmp_pickerpermission.feature.gallery.GalleryScreen
 import com.yoesuv.kmp_pickerpermission.feature.home.HomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -22,7 +23,9 @@ fun App() {
             composable<AppRoute.Gallery> {
                 GalleryScreen(navController)
             }
+            composable<AppRoute.Camera> {
+                CameraScreen(navController)
+            }
         }
     }
-
 }
