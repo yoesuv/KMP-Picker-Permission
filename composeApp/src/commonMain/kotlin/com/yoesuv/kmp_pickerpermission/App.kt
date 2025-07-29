@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.yoesuv.kmp_pickerpermission.core.route.AppRoute
 import com.yoesuv.kmp_pickerpermission.feature.camera.CameraScreen
+import com.yoesuv.kmp_pickerpermission.feature.datetime.DateTimeScreen
 import com.yoesuv.kmp_pickerpermission.feature.file.FileScreen
 import com.yoesuv.kmp_pickerpermission.feature.gallery.GalleryScreen
 import com.yoesuv.kmp_pickerpermission.feature.home.HomeScreen
@@ -29,6 +30,9 @@ fun App() {
             }
             composable<AppRoute.File> {
                 FileScreen(navController)
+            }
+            composable<AppRoute.DateTime> {
+                DateTimeScreen(navController)
             }
         }
     }

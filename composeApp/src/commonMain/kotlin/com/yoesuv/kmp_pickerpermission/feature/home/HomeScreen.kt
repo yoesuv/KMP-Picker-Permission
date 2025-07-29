@@ -100,7 +100,7 @@ fun HomeScreen(nav: NavHostController) {
                 AppButton(
                     text = stringResource(Res.string.date_time),
                     onClick = {
-                        // TODO: Setup date time functionality
+                        nav.navigate(AppRoute.DateTime)
                     }
                 )
             }

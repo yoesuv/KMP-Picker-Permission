@@ -11,4 +11,8 @@
     <string name="notifications">Notifications</string>
     <string name="download_file">Download File</string>
     <string name="date_time">Date Time</string>
+    <string name="selected_date">Selected Date</string>
+    <string name="date_picker">Date Picker</string>
+    <string name="selected_time">Selected Time</string>
+    <string name="time_picker">Time Picker</string>
 </resources>
