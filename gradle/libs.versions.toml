@@ -10,11 +10,13 @@ androidx-core = "1.16.0"
 androidx-espresso = "3.6.1"
 androidx-lifecycle = "2.9.1"
 androidx-testExt = "1.2.1"
+coil = "3.3.0"
 composeMultiplatform = "1.8.2"
 filekit = "0.10.0"
 junit = "4.13.2"
 kotlin = "2.2.0"
 kotlinxSerialization = "1.9.0"
+ktor = "2.3.7"
 navigation = "2.9.0-beta03"
 material-icons-extended = "1.7.3"
 
@@ -35,6 +37,9 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
