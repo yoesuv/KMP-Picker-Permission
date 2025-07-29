@@ -20,14 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi
-import com.mohamedrejeb.calf.permissions.Permission
-import com.mohamedrejeb.calf.permissions.isGranted
-import com.mohamedrejeb.calf.permissions.rememberPermissionState
-import com.yoesuv.kmp_pickerpermission.Platform
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
-import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.absolutePath
@@ -42,17 +36,10 @@ import kmppickerpermission.composeapp.generated.resources.open_gallery
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryScreen(nav: NavHostController) {
     var selectedFile: PlatformFile? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
-    val platform = getCurrentPlatform()
-
-    // Gallery permission for iOS only
-    val galleryPermissionState = rememberPermissionState(
-        permission = Permission.Gallery
-    )
 
     Scaffold(
         topBar = {
@@ -100,43 +87,13 @@ fun GalleryScreen(nav: NavHostController) {
                 onClick = {
                     coroutineScope.launch {
                         try {
-                            when (platform) {
-                                Platform.IOS -> {
-                                    // iOS needs permission
-                                    if (galleryPermissionState.status.isGranted) {
-                                        val file = FileKit.openFilePicker(
-                                            type = FileKitType.Image,
-                                            mode = FileKitMode.Single
-                                        )
-                                        selectedFile = file
-                                    } else {
-                                        galleryPermissionState.launchPermissionRequest()
-                                        if (galleryPermissionState.status.isGranted) {
-                                            val file = FileKit.openFilePicker(
-                                                type = FileKitType.Image,
-                                                mode = FileKitMode.Single
-                                            )
-                                            selectedFile = file
-                                        }
-                                    }
-                                }
-                                Platform.ANDROID -> {
-                                    // Android doesn't need permission for FileKit
-                                    val file = FileKit.openFilePicker(
-                                        type = FileKitType.Image,
-                                        mode = FileKitMode.Single
-                                    )
-                                    selectedFile = file
-                                }
-                                else -> {
-                                    // Desktop or other platforms
-                                    val file = FileKit.openFilePicker(
-                                        type = FileKitType.Image,
-                                        mode = FileKitMode.Single
-                                    )
-                                    selectedFile = file
-                                }
-                            }
+                            // All platforms can use FileKit directly
+                            // iOS uses PHPickerViewController which doesn't require permission
+                            val file = FileKit.openFilePicker(
+                                type = FileKitType.Image,
+                                mode = FileKitMode.Single
+                            )
+                            selectedFile = file
                         } catch (e: Exception) {
                             selectedFile = null
                         }
