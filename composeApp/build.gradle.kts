@@ -61,6 +61,9 @@ kotlin {
             
             // Coil dependencies
             implementation(libs.coil.compose)
+            
+            // Calf Permissions
+            implementation(libs.calf.permissions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -78,6 +81,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0.0"
+        setProperty("archivesBaseName", "$applicationId-v$versionCode($versionName)")
     }
     packaging {
         resources {

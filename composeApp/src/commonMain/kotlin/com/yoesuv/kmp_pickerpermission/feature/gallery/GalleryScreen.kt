@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
+import com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi
+import com.mohamedrejeb.calf.permissions.Permission
+import com.mohamedrejeb.calf.permissions.isGranted
+import com.mohamedrejeb.calf.permissions.rememberPermissionState
+import com.yoesuv.kmp_pickerpermission.Platform
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.absolutePath
@@ -37,10 +42,17 @@ import kmppickerpermission.composeapp.generated.resources.open_gallery
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryScreen(nav: NavHostController) {
     var selectedFile: PlatformFile? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
+    val platform = getCurrentPlatform()
+
+    // Gallery permission for iOS only
+    val galleryPermissionState = rememberPermissionState(
+        permission = Permission.Gallery
+    )
 
     Scaffold(
         topBar = {
@@ -54,13 +66,13 @@ fun GalleryScreen(nav: NavHostController) {
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
-                .padding(24.dp)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            // Image display
             AsyncImage(
                 model = selectedFile?.absolutePath(),
-                contentDescription = "Selected image",
+                contentDescription = "Selected Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
@@ -69,66 +81,68 @@ fun GalleryScreen(nav: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            if (selectedFile != null) {
+                Text(
+                    text = "Selected Image Info:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Name: ${selectedFile?.name}")
+                Text("Path: ${selectedFile?.absolutePath()}")
+                Text("Extension: ${selectedFile?.extension}")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             AppButton(
                 text = stringResource(Res.string.open_gallery),
                 onClick = {
                     coroutineScope.launch {
-                        val file = FileKit.openFilePicker(
-                            type = FileKitType.Image,
-                            mode = FileKitMode.Single
-                        )
-                        selectedFile = file
+                        try {
+                            when (platform) {
+                                Platform.IOS -> {
+                                    // iOS needs permission
+                                    if (galleryPermissionState.status.isGranted) {
+                                        val file = FileKit.openFilePicker(
+                                            type = FileKitType.Image,
+                                            mode = FileKitMode.Single
+                                        )
+                                        selectedFile = file
+                                    } else {
+                                        galleryPermissionState.launchPermissionRequest()
+                                        if (galleryPermissionState.status.isGranted) {
+                                            val file = FileKit.openFilePicker(
+                                                type = FileKitType.Image,
+                                                mode = FileKitMode.Single
+                                            )
+                                            selectedFile = file
+                                        }
+                                    }
+                                }
+                                Platform.ANDROID -> {
+                                    // Android doesn't need permission for FileKit
+                                    val file = FileKit.openFilePicker(
+                                        type = FileKitType.Image,
+                                        mode = FileKitMode.Single
+                                    )
+                                    selectedFile = file
+                                }
+                                else -> {
+                                    // Desktop or other platforms
+                                    val file = FileKit.openFilePicker(
+                                        type = FileKitType.Image,
+                                        mode = FileKitMode.Single
+                                    )
+                                    selectedFile = file
+                                }
+                            }
+                        } catch (e: Exception) {
+                            selectedFile = null
+                        }
                     }
                 }
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Selected Image Info:",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            if (selectedFile != null) {
-                // File Name
-                Text(
-                    text = "Name: ${selectedFile?.name}",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Absolute Path
-                Text(
-                    text = "Absolute Path: ${selectedFile?.absolutePath()}",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // File Extension
-                Text(
-                    text = "Extension: ${selectedFile?.extension}",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            } else {
-                Text(
-                    text = "No image selected",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.yoesuv.kmp_pickerpermission
 
-interface Platform {
-    val name: String
+enum class Platform {
+    ANDROID, IOS
 }
 
-expect fun getPlatform(): Platform
+expect fun getCurrentPlatform(): Platform
