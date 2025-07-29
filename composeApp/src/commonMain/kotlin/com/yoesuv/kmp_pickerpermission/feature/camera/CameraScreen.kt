@@ -18,14 +18,21 @@ import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.absolutePath
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.camera
 import kmppickerpermission.composeapp.generated.resources.open_camera
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import androidx.compose.runtime.rememberCoroutineScope
+import io.github.vinceglb.filekit.dialogs.openCameraPicker
 
 @Composable
 fun CameraScreen(nav: NavHostController) {
-    var photoPath: String? by remember { mutableStateOf(null) }
+    var photoFile: PlatformFile? by remember { mutableStateOf(null) }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -45,7 +52,7 @@ fun CameraScreen(nav: NavHostController) {
         ) {
             // Display camera photo using Coil AsyncImage
             AsyncImage(
-                model = photoPath,
+                model = photoFile?.absolutePath(),
                 contentDescription = "Camera Photo",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,7 +66,10 @@ fun CameraScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.open_camera),
                 onClick = {
-                    // TODO: Implement camera functionality
+                    coroutineScope.launch {
+                        val file = FileKit.openCameraPicker()
+                        photoFile = file
+                    }
                 }
             )
         }
