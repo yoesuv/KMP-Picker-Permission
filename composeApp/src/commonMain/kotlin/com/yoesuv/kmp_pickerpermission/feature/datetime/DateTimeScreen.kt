@@ -5,8 +5,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +32,14 @@ import kmppickerpermission.composeapp.generated.resources.selected_time
 import kmppickerpermission.composeapp.generated.resources.time_picker
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimeScreen(nav: NavHostController) {
-    var selectedDate by remember { mutableStateOf<String?>(null) }
+    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var selectedTime by remember { mutableStateOf<String?>(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    val datePickerState = rememberDatePickerState()
 
     Scaffold(
         topBar = {
@@ -57,7 +66,7 @@ fun DateTimeScreen(nav: NavHostController) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = selectedDate ?: "No date selected",
+                text = selectedDateMillis?.toString() ?: "No date selected",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal
             )
@@ -67,8 +76,7 @@ fun DateTimeScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.date_picker),
                 onClick = {
-                    // TODO: Implement date picker functionality
-                    selectedDate = "2024-01-01" // Placeholder
+                    showDatePicker = true
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -95,6 +103,31 @@ fun DateTimeScreen(nav: NavHostController) {
                     selectedTime = "12:00 PM" // Placeholder
                 }
             )
+        }
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        selectedDateMillis = datePickerState.selectedDateMillis
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDatePicker = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 }
