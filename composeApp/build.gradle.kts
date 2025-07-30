@@ -54,16 +54,11 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.navigation.compose)
             implementation(libs.material.icons.extended)
-            
-            // FileKit dependencies
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs)
-            
-            // Coil dependencies
             implementation(libs.coil.compose)
-            
-            // Calf Permissions
             implementation(libs.calf.permissions)
+            implementation(libs.kotlinx.datetime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
