@@ -5,13 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
+import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.date_picker
@@ -32,14 +28,11 @@ import kmppickerpermission.composeapp.generated.resources.selected_time
 import kmppickerpermission.composeapp.generated.resources.time_picker
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimeScreen(nav: NavHostController) {
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var selectedTime by remember { mutableStateOf<String?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
-
-    val datePickerState = rememberDatePickerState()
 
     Scaffold(
         topBar = {
@@ -106,28 +99,14 @@ fun DateTimeScreen(nav: NavHostController) {
         }
     }
 
-    if (showDatePicker) {
-        DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        selectedDateMillis = datePickerState.selectedDateMillis
-                        showDatePicker = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { showDatePicker = false }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        ) {
-            DatePicker(state = datePickerState)
+    AppDatePicker(
+        showDatePicker = showDatePicker,
+        onDateSelected = { dateMillis ->
+            selectedDateMillis = dateMillis
+            showDatePicker = false
+        },
+        onDismiss = {
+            showDatePicker = false
         }
-    }
+    )
 }
