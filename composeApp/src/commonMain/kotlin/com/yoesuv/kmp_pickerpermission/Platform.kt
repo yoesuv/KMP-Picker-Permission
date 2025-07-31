@@ -5,3 +5,9 @@ enum class Platform {
 }
 
 expect fun getCurrentPlatform(): Platform
+
+val Platform.isAndroid: Boolean
+    get() = this == Platform.ANDROID
+
+val Platform.isIOS: Boolean
+    get() = this == Platform.IOS

@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
+import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
+import com.yoesuv.kmp_pickerpermission.isAndroid
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.date_picker
@@ -33,6 +35,8 @@ fun DateTimeScreen(nav: NavHostController) {
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var selectedTime by remember { mutableStateOf<String?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
+
+    val currentPlatform = getCurrentPlatform()
 
     Scaffold(
         topBar = {
@@ -65,11 +69,16 @@ fun DateTimeScreen(nav: NavHostController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Date Picker Button
+            // Date Picker Button - shown on both platforms
             AppButton(
                 text = stringResource(Res.string.date_picker),
                 onClick = {
-                    showDatePicker = true
+                    if (currentPlatform.isAndroid) {
+                        showDatePicker = true
+                    } else {
+                        // iOS: just log the message
+                        println("date picker on ios")
+                    }
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -99,14 +108,17 @@ fun DateTimeScreen(nav: NavHostController) {
         }
     }
 
-    AppDatePicker(
-        showDatePicker = showDatePicker,
-        onDateSelected = { dateMillis ->
-            selectedDateMillis = dateMillis
-            showDatePicker = false
-        },
-        onDismiss = {
-            showDatePicker = false
-        }
-    )
+    // Only show AppDatePicker on Android
+    if (currentPlatform.isAndroid) {
+        AppDatePicker(
+            showDatePicker = showDatePicker,
+            onDateSelected = { dateMillis ->
+                selectedDateMillis = dateMillis
+                showDatePicker = false
+            },
+            onDismiss = {
+                showDatePicker = false
+            }
+        )
+    }
 }
