@@ -22,6 +22,7 @@ import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
 import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
 import com.yoesuv.kmp_pickerpermission.isAndroid
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import com.yoesuv.kmp_pickerpermission.platform.pickDate
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.date_picker
 import kmppickerpermission.composeapp.generated.resources.date_time
@@ -76,8 +77,10 @@ fun DateTimeScreen(nav: NavHostController) {
                     if (currentPlatform.isAndroid) {
                         showDatePicker = true
                     } else {
-                        // iOS: just log the message
-                        println("date picker on ios")
+                        // iOS: Use native date picker
+                        pickDate { dateMillis ->
+                            selectedDateMillis = dateMillis
+                        }
                     }
                 }
             )
