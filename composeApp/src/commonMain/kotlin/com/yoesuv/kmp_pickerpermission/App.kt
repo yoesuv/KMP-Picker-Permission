@@ -11,6 +11,7 @@ import com.yoesuv.kmp_pickerpermission.feature.datetime.DateTimeScreen
 import com.yoesuv.kmp_pickerpermission.feature.file.FileScreen
 import com.yoesuv.kmp_pickerpermission.feature.gallery.GalleryScreen
 import com.yoesuv.kmp_pickerpermission.feature.home.HomeScreen
+import com.yoesuv.kmp_pickerpermission.feature.location.LocationScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -33,6 +34,9 @@ fun App() {
             }
             composable<AppRoute.DateTime> {
                 DateTimeScreen(navController)
+            }
+            composable<AppRoute.Location> {
+                LocationScreen(navController)
             }
         }
     }

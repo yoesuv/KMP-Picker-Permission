@@ -15,4 +15,5 @@
     <string name="date_picker">Date Picker</string>
     <string name="selected_time">Selected Time</string>
     <string name="time_picker">Time Picker</string>
+    <string name="get_location">Get Location</string>
 </resources>

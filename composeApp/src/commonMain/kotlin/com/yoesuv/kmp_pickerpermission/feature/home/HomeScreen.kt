@@ -68,7 +68,7 @@ fun HomeScreen(nav: NavHostController) {
                 AppButton(
                     text = stringResource(Res.string.location),
                     onClick = {
-                        // TODO: Setup location functionality
+                        nav.navigate(AppRoute.Location)
                     },
                     modifier = Modifier.padding(bottom = BUTTON_BOTTOM_PADDING)
                 )

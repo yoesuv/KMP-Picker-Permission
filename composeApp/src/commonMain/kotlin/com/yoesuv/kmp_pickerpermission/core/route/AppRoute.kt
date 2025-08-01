@@ -8,4 +8,5 @@ sealed class AppRoute {
     @Serializable object Camera : AppRoute()
     @Serializable object File : AppRoute()
     @Serializable object DateTime : AppRoute()
+    @Serializable object Location : AppRoute()
 }
