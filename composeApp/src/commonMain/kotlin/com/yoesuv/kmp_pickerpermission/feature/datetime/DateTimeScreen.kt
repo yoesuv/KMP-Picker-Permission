@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
+import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
 import com.yoesuv.kmp_pickerpermission.isAndroid
-import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import com.yoesuv.kmp_pickerpermission.platform.pickDate
+import com.yoesuv.kmp_pickerpermission.utils.formatDateFromMillis
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.date_picker
 import kmppickerpermission.composeapp.generated.resources.date_time
@@ -64,7 +65,7 @@ fun DateTimeScreen(nav: NavHostController) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = selectedDateMillis?.toString() ?: "No date selected",
+                text = selectedDateMillis?.let { formatDateFromMillis(it) } ?: "No date selected",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal
             )
