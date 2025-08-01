@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
+import com.yoesuv.kmp_pickerpermission.components.AppTimePicker
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
 import com.yoesuv.kmp_pickerpermission.isAndroid
@@ -37,6 +38,7 @@ fun DateTimeScreen(nav: NavHostController) {
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var selectedTime by remember { mutableStateOf<String?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
 
     val currentPlatform = getCurrentPlatform()
 
@@ -105,8 +107,7 @@ fun DateTimeScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.time_picker),
                 onClick = {
-                    // TODO: Implement time picker functionality
-                    selectedTime = "12:00 PM" // Placeholder
+                    showTimePicker = true
                 }
             )
         }
@@ -125,4 +126,20 @@ fun DateTimeScreen(nav: NavHostController) {
             }
         )
     }
+
+    // AppTimePicker for all platforms
+    AppTimePicker(
+        showTimePicker = showTimePicker,
+        onTimeSelected = { hour, minute ->
+            println("Time selected - Hour: $hour, Minute: $minute")
+            // Format time as HH:MM in 24-hour format
+            val paddedHour = hour.toString().padStart(2, '0')
+            val paddedMinute = minute.toString().padStart(2, '0')
+            selectedTime = "$paddedHour:$paddedMinute"
+            showTimePicker = false
+        },
+        onDismiss = {
+            showTimePicker = false
+        }
+    )
 }
