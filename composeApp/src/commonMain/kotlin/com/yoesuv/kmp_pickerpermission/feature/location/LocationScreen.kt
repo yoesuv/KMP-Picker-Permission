@@ -48,6 +48,7 @@ fun LocationScreen(nav: NavHostController) {
 
     val permissionState by viewModel.permissionState.collectAsState()
     val currentLocation by viewModel.currentLocation.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = {
@@ -135,6 +136,7 @@ fun LocationScreen(nav: NavHostController) {
                         viewModel.requestLocationPermission()
                     }
                 },
+                loading = isLoading,
                 modifier = Modifier.fillMaxWidth()
             )
         }

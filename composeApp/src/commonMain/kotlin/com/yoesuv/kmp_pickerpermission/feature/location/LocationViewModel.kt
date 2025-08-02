@@ -20,28 +20,31 @@ import dev.jordond.compass.geolocation.mobile
 class LocationViewModel(
     private val permissionsController: PermissionsController
 ) : ViewModel() {
-
+    
     private val _permissionState = MutableStateFlow(PermissionState.NotDetermined)
     val permissionState: StateFlow<PermissionState> = _permissionState.asStateFlow()
-
+    
     private val _currentLocation = MutableStateFlow<LocationData?>(null)
     val currentLocation: StateFlow<LocationData?> = _currentLocation.asStateFlow()
-
-    private val geolocator = Geolocator.Companion.mobile()
-
+    
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    
+    private val geolocator = Geolocator.mobile()
+    
     init {
         viewModelScope.launch {
             // Initialize with current permission state
             _permissionState.value = permissionsController.getPermissionState(Permission.LOCATION)
         }
     }
-
+    
     fun requestLocationPermission() {
         viewModelScope.launch {
             try {
                 permissionsController.providePermission(Permission.LOCATION)
                 _permissionState.value = PermissionState.Granted
-
+                
                 // After permission granted, get actual location using Compass
                 getCurrentLocation()
             } catch (e: DeniedException) {
@@ -53,33 +56,37 @@ class LocationViewModel(
             }
         }
     }
-
+    
     private suspend fun getCurrentLocation() {
-        val result = geolocator.current()
-        when (result) {
-            is GeolocatorResult.Success -> {
-                _currentLocation.value = LocationData(
-                    latitude = result.data.coordinates.latitude,
-                    longitude = result.data.coordinates.longitude
-                )
+        _isLoading.value = true
+        try {
+            val result = geolocator.current()
+            when (result) {
+                is GeolocatorResult.Success -> {
+                    _currentLocation.value = LocationData(
+                        latitude = result.data.coordinates.latitude,
+                        longitude = result.data.coordinates.longitude
+                    )
+                }
+                is GeolocatorResult.Error -> {
+                    // Fallback to mock location if geolocation fails
+                    _currentLocation.value = LocationData(
+                        latitude = 0.0,
+                        longitude = 0.0
+                    )
+                }
             }
-
-            is GeolocatorResult.Error -> {
-                // Fallback to mock location if geolocation fails
-                _currentLocation.value = LocationData(
-                    latitude = 0.0,
-                    longitude = 0.0
-                )
-            }
+        } finally {
+            _isLoading.value = false
         }
     }
-
+    
     fun openAppSettings() {
         permissionsController.openAppSettings()
     }
 }
 
 data class LocationData(
-    val latitude: Double?,
+    val latitude: Double?, 
     val longitude: Double?
 )
