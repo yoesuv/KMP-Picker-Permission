@@ -60,6 +60,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
+            implementation(libs.moko.permissions.location)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

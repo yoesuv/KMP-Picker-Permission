@@ -46,6 +46,7 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "mokoPermissions" }
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "mokoPermissions" }
+moko-permissions-location = { module = "dev.icerock.moko:permissions-location", version.ref = "mokoPermissions" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
