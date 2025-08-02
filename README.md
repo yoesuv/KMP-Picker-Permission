@@ -3,6 +3,7 @@
 
 #### List Library ####
 - [Coil](https://coil-kt.github.io/coil/)
+- [Compass](https://github.com/jordond/compass)
 - [FileKit](https://github.com/vinceglb/FileKit)
 - [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)
 - [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)

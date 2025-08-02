@@ -12,6 +12,7 @@ androidx-lifecycle = "2.9.1"
 androidx-testExt = "1.2.1"
 calf = "0.8.0"
 coil = "3.3.0"
+compass = "2.3.1"
 composeMultiplatform = "1.8.2"
 filekit = "0.10.0"
 junit = "4.13.2"
@@ -42,6 +43,8 @@ material-icons-extended = { module = "org.jetbrains.compose.material:material-ic
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
 filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+compass-geolocation = { module = "dev.jordond.compass:geolocation", version.ref = "compass" }
+compass-geolocation-mobile = { module = "dev.jordond.compass:geolocation-mobile", version.ref = "compass" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "mokoPermissions" }
