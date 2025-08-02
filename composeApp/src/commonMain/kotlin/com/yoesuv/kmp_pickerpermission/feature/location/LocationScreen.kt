@@ -60,11 +60,49 @@ fun LocationScreen(nav: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Latitude, Longitude",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium
-            )
+            when (permissionState) {
+                PermissionState.NotDetermined -> {
+                    Text(
+                        text = "Latitude, Longitude",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                PermissionState.Granted -> {
+                    currentLocation?.let { location ->
+                        Text(
+                            text = "${location.latitude ?: 0}, ${location.longitude ?: 0}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    } ?: Text(
+                        text = "Latitude, Longitude",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                PermissionState.Denied -> {
+                    Text(
+                        text = "Latitude, Longitude",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                PermissionState.DeniedAlways -> {
+                    Text(
+                        text = "Latitude, Longitude",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                else -> {
+                    Text(
+                        text = "Latitude, Longitude",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -75,7 +113,7 @@ fun LocationScreen(nav: NavHostController) {
                 PermissionState.Granted -> {
                     currentLocation?.let { location ->
                         Text(
-                            text = "${location.latitude}, ${location.longitude}",
+                            text = "Location permission granted.",
                             fontSize = 16.sp,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -95,9 +133,9 @@ fun LocationScreen(nav: NavHostController) {
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
-                PermissionState.NotGranted -> {
+                else -> {
                     Text(
-                        text = "Location permission granted.",
+                        text = "Location permission not granted.",
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
