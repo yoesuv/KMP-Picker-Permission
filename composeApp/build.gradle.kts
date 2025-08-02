@@ -57,8 +57,9 @@ kotlin {
             implementation(libs.filekit.core)
             implementation(libs.filekit.dialogs)
             implementation(libs.coil.compose)
-            implementation(libs.calf.permissions)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

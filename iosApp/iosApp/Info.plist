@@ -6,5 +6,11 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to the camera to take photos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to provide location-based services</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to your location even when running in the background</string>
+	<key>NSLocationUsageDescription</key>
+	<string>This app needs access to your location to provide location-based features</string>
 </dict>
 </plist>

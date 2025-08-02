@@ -20,6 +20,7 @@ kotlinxDatetime = "0.7.1"
 kotlinxSerialization = "1.9.0"
 ktor = "3.2.2"
 navigation = "2.9.0-beta03"
+mokoPermissions = "0.19.1"
 material-icons-extended = "1.7.3"
 
 [libraries]
@@ -34,7 +35,6 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-calf-permissions = { module = "com.mohamedrejeb.calf:calf-permissions", version.ref = "calf" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
@@ -44,6 +44,8 @@ filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref =
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "mokoPermissions" }
+moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "mokoPermissions" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
