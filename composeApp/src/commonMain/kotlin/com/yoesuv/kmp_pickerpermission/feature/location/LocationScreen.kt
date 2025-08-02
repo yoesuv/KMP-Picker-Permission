@@ -24,6 +24,7 @@ import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.get_location
 import kmppickerpermission.composeapp.generated.resources.location
+import kmppickerpermission.composeapp.generated.resources.open_settings
 import androidx.compose.runtime.collectAsState
 import org.jetbrains.compose.resources.stringResource
 
@@ -71,7 +72,6 @@ fun LocationScreen(nav: NavHostController) {
                 PermissionState.NotDetermined -> {
                     // Initial state - show nothing
                 }
-
                 PermissionState.Granted -> {
                     currentLocation?.let { location ->
                         Text(
@@ -81,42 +81,23 @@ fun LocationScreen(nav: NavHostController) {
                         )
                     }
                 }
-
                 PermissionState.Denied -> {
                     Text(
                         text = "Location permission denied.",
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    AppButton(
-                        text = "Open Settings",
-                        onClick = {
-                            viewModel.openAppSettings()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
-
                 PermissionState.DeniedAlways -> {
                     Text(
                         text = "Location permission permanently denied. Please enable it in settings.",
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    AppButton(
-                        text = "Open Settings",
-                        onClick = {
-                            viewModel.openAppSettings()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
-
                 PermissionState.NotGranted -> {
                     Text(
-                        text = "Location permission not granted.",
+                        text = "Location permission granted.",
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
@@ -125,15 +106,22 @@ fun LocationScreen(nav: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (permissionState != PermissionState.Granted) {
-                AppButton(
-                    text = stringResource(Res.string.get_location),
-                    onClick = {
+            // Single button that conditionally opens settings or requests permission
+            AppButton(
+                text = if (permissionState == PermissionState.DeniedAlways) {
+                    stringResource(Res.string.open_settings)
+                } else {
+                    stringResource(Res.string.get_location)
+                },
+                onClick = {
+                    if (permissionState == PermissionState.DeniedAlways) {
+                        viewModel.openAppSettings()
+                    } else {
                         viewModel.requestLocationPermission()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
