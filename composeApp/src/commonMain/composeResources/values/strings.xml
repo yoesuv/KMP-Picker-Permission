@@ -17,4 +17,10 @@
     <string name="time_picker">Time Picker</string>
     <string name="get_location">Get Location</string>
     <string name="open_settings">Open Settings</string>
+    <string name="latitude">Latitude: %1$s</string>
+    <string name="longitude">Longitude: %1$s</string>
+    <string name="location_permission_granted">Location permission granted.</string>
+    <string name="location_permission_denied">Location permission denied.</string>
+    <string name="location_permission_permanently_denied">Location permission permanently denied. Please enable it in settings.</string>
+    <string name="location_permission_not_granted">Location permission not granted.</string>
 </resources>

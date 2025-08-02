@@ -23,7 +23,12 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.get_location
+import kmppickerpermission.composeapp.generated.resources.latitude
 import kmppickerpermission.composeapp.generated.resources.location
+import kmppickerpermission.composeapp.generated.resources.location_permission_denied
+import kmppickerpermission.composeapp.generated.resources.location_permission_granted
+import kmppickerpermission.composeapp.generated.resources.location_permission_permanently_denied
+import kmppickerpermission.composeapp.generated.resources.longitude
 import kmppickerpermission.composeapp.generated.resources.open_settings
 import androidx.compose.runtime.collectAsState
 import org.jetbrains.compose.resources.stringResource
@@ -61,16 +66,23 @@ fun LocationScreen(nav: NavHostController) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Latitude : ${currentLocation?.latitude}",
+                text = stringResource(
+                    Res.string.latitude,
+                    currentLocation?.latitude?.toString() ?: "0"
+                ),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Longitude : ${currentLocation?.longitude}",
+                text = stringResource(
+                    Res.string.longitude,
+                    currentLocation?.longitude?.toString() ?: "0"
+                ),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             when (permissionState) {
@@ -80,7 +92,7 @@ fun LocationScreen(nav: NavHostController) {
 
                 PermissionState.Granted -> {
                     Text(
-                        text = "Location permission granted.",
+                        text = stringResource(Res.string.location_permission_granted),
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
@@ -88,7 +100,7 @@ fun LocationScreen(nav: NavHostController) {
 
                 PermissionState.Denied -> {
                     Text(
-                        text = "Location permission denied.",
+                        text = stringResource(Res.string.location_permission_denied),
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
@@ -96,7 +108,7 @@ fun LocationScreen(nav: NavHostController) {
 
                 PermissionState.DeniedAlways -> {
                     Text(
-                        text = "Location permission permanently denied. Please enable it in settings.",
+                        text = stringResource(Res.string.location_permission_permanently_denied),
                         fontSize = 16.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
@@ -111,13 +123,13 @@ fun LocationScreen(nav: NavHostController) {
 
             // Single button that conditionally opens settings or requests permission
             AppButton(
-                text = if (permissionState == PermissionState.DeniedAlways) {
+                text = if (permissionState == PermissionState.DeniedAlways || permissionState == PermissionState.Denied) {
                     stringResource(Res.string.open_settings)
                 } else {
                     stringResource(Res.string.get_location)
                 },
                 onClick = {
-                    if (permissionState == PermissionState.DeniedAlways) {
+                    if (permissionState == PermissionState.DeniedAlways || permissionState == PermissionState.Denied) {
                         viewModel.openAppSettings()
                     } else {
                         viewModel.requestLocationPermission()
