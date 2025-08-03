@@ -84,7 +84,7 @@ fun HomeScreen(nav: NavHostController) {
                 AppButton(
                     text = stringResource(Res.string.notifications),
                     onClick = {
-                        // TODO: Setup notifications functionality
+                        nav.navigate(AppRoute.Notification)
                     },
                     modifier = Modifier.padding(bottom = BUTTON_BOTTOM_PADDING)
                 )

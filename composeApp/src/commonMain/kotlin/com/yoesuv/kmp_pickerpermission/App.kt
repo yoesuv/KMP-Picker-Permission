@@ -12,6 +12,7 @@ import com.yoesuv.kmp_pickerpermission.feature.file.FileScreen
 import com.yoesuv.kmp_pickerpermission.feature.gallery.GalleryScreen
 import com.yoesuv.kmp_pickerpermission.feature.home.HomeScreen
 import com.yoesuv.kmp_pickerpermission.feature.location.LocationScreen
+import com.yoesuv.kmp_pickerpermission.feature.notification.NotificationScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -37,6 +38,9 @@ fun App() {
             }
             composable<AppRoute.Location> {
                 LocationScreen(navController)
+            }
+            composable<AppRoute.Notification> {
+                NotificationScreen(navController)
             }
         }
     }

@@ -9,4 +9,5 @@ sealed class AppRoute {
     @Serializable object File : AppRoute()
     @Serializable object DateTime : AppRoute()
     @Serializable object Location : AppRoute()
+    @Serializable object Notification : AppRoute()
 }
