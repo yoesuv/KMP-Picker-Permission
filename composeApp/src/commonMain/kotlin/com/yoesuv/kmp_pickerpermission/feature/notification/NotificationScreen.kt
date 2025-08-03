@@ -47,7 +47,6 @@ fun NotificationScreen(nav: NavHostController) {
 
     val permissionState by viewModel.permissionState.collectAsState()
     val notificationState by viewModel.notificationState.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = {
@@ -129,7 +128,6 @@ fun NotificationScreen(nav: NavHostController) {
                         viewModel.requestNotificationPermission()
                     }
                 },
-                loading = isLoading,
                 modifier = Modifier.fillMaxWidth()
             )
         }

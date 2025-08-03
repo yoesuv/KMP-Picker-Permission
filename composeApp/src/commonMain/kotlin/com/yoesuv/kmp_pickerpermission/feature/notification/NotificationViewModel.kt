@@ -1,5 +1,6 @@
 package com.yoesuv.kmp_pickerpermission.feature.notification
 
+import com.yoesuv.kmp_pickerpermission.isNotificationPermissionRequired
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.PermissionState
@@ -28,14 +29,25 @@ class NotificationViewModel(
     private val _notificationState = MutableStateFlow(NotificationState())
     val notificationState: StateFlow<NotificationState> = _notificationState.asStateFlow()
     
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    init {
+        viewModelScope.launch {
+            // Initialize with current permission state
+            _permissionState.value = permissionsController.getPermissionState(Permission.REMOTE_NOTIFICATION)
+            
+            // Update notification status based on current permission state
+            if (_permissionState.value == PermissionState.Granted) {
+                updateNotificationStatus()
+            }
+        }
+    }
     
     fun requestNotificationPermission() {
         viewModelScope.launch {
-            _isLoading.value = true
             try {
-                permissionsController.providePermission(Permission.REMOTE_NOTIFICATION)
+                // Only request permission if required by the platform
+                if (isNotificationPermissionRequired()) {
+                    permissionsController.providePermission(Permission.REMOTE_NOTIFICATION)
+                }
                 _permissionState.value = PermissionState.Granted
                 updateNotificationStatus()
             } catch (e: DeniedException) {
@@ -45,8 +57,6 @@ class NotificationViewModel(
             } catch (e: RequestCanceledException) {
                 // User cancelled the permission request
                 e.printStackTrace()
-            } finally {
-                _isLoading.value = false
             }
         }
     }
