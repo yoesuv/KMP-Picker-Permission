@@ -14,6 +14,9 @@ class MainActivity : ComponentActivity() {
 
         FileKit.init(this)
 
+        // Provide platform notifier to common code
+        NotifierHolder.provide(AndroidNotifier(this))
+
         setContent {
             App()
         }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.icerock.moko.permissions.notifications.REMOTE_NOTIFICATION
+import com.yoesuv.kmp_pickerpermission.NotifierHolder
 
 data class NotificationState(
     val status: String = "Unknown"
@@ -69,6 +70,13 @@ class NotificationViewModel(
         )
     }
     
+    fun showLocalNotification() {
+        NotifierHolder.getOrNull()?.showNotification(
+            title = "KMP Local Notification",
+            message = "Hello from KMP!"
+        )
+    }
+
     fun openAppSettings() {
         permissionsController.openAppSettings()
     }

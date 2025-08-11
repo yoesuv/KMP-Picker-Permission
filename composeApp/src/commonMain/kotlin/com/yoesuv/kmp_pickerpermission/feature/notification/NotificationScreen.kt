@@ -125,7 +125,12 @@ fun NotificationScreen(nav: NavHostController) {
                     ) {
                         viewModel.openAppSettings()
                     } else {
-                        viewModel.requestNotificationPermission()
+                        // If already granted, show a sample local notification. Otherwise request permission.
+                        if (permissionState == PermissionState.Granted) {
+                            viewModel.showLocalNotification()
+                        } else {
+                            viewModel.requestNotificationPermission()
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
