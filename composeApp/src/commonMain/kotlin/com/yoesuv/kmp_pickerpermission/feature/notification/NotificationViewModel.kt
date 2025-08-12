@@ -51,6 +51,8 @@ class NotificationViewModel(
                 }
                 _permissionState.value = PermissionState.Granted
                 updateNotificationStatus()
+                // Option B: Automatically show a local notification after permission is granted
+                showLocalNotification()
             } catch (e: DeniedException) {
                 _permissionState.value = PermissionState.Denied
             } catch (e: DeniedAlwaysException) {
