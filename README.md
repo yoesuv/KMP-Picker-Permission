@@ -2,7 +2,7 @@
 
 
 #### Screenshots iOS ####
-| - | - | - | - |
+| - | ![](https://i.imgur.com/c6FHYOL.png) | ![](https://i.imgur.com/P9CG3QP.png) | - |
 | --- | --- | --- | --- |
 | - | - | - | - |
 | - | - | ![](https://i.imgur.com/Sveh54c.png) | ![](https://i.imgur.com/NQF7INU.png) |
