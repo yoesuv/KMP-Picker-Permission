@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         NotifierHolder.provide(AndroidNotifier(this))
 
         // Provide platform downloader to common code
-        DownloaderHolder.provide(AndroidFileDownloader())
+        DownloaderHolder.provide(AndroidFileDownloader(this))
 
         setContent {
             App()
