@@ -1,7 +1,9 @@
 package com.yoesuv.kmp_pickerpermission.download
 
+import kotlinx.coroutines.flow.Flow
+
 interface FileDownloader {
-    suspend fun download(url: String)
+    fun download(url: String): Flow<DownloadStatus>
 }
 
 object DownloaderHolder {

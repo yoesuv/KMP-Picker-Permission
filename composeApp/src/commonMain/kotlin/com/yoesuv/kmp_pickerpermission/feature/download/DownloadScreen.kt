@@ -1,5 +1,5 @@
 package com.yoesuv.kmp_pickerpermission.feature.download
- 
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,17 +18,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import com.yoesuv.kmp_pickerpermission.download.DownloadStatus
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.download_file
 import org.jetbrains.compose.resources.stringResource
- 
+
 @Composable
 fun DownloadScreen(nav: NavHostController) {
     val viewModel: DownloadViewModel = viewModel(
         factory = DownloadViewModelFactory.create()
     )
-    val statusText by viewModel.status.collectAsState()
- 
+    val status by viewModel.status.collectAsState()
+
     Scaffold(
         topBar = {
             AppTopBar(
@@ -44,13 +45,19 @@ fun DownloadScreen(nav: NavHostController) {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = statusText,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
+            val label = when (val s = status) {
+                is DownloadStatus.Start -> "Ready"
+                is DownloadStatus.Progress -> {
+                    val pct = s.percent?.let { "$it%" } ?: "..."
+                    "Downloading: $pct"
+                }
+
+                is DownloadStatus.Success -> "Download success"
+                is DownloadStatus.Failed -> "Failed: ${s.message}"
+            }
+            Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(16.dp))
- 
+
             AppButton(
                 text = stringResource(Res.string.download_file),
                 onClick = { viewModel.onDownloadClicked() },
