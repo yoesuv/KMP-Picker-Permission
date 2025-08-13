@@ -10,4 +10,5 @@ sealed class AppRoute {
     @Serializable object DateTime : AppRoute()
     @Serializable object Location : AppRoute()
     @Serializable object Notification : AppRoute()
+    @Serializable object Download : AppRoute()
 }

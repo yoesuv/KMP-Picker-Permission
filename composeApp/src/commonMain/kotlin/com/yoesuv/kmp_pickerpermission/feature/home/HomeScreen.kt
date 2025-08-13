@@ -92,7 +92,7 @@ fun HomeScreen(nav: NavHostController) {
                 AppButton(
                     text = stringResource(Res.string.download_file),
                     onClick = {
-                        // TODO: Setup download file functionality
+                        nav.navigate(AppRoute.Download)
                     },
                     modifier = Modifier.padding(bottom = BUTTON_BOTTOM_PADDING)
                 )
