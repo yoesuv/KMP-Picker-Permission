@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,7 +46,8 @@ fun RecordScreen(nav: NavHostController) {
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val statusLabel = when (status) {
                 RecordingStatus.Start -> stringResource(Res.string.start)
@@ -70,9 +72,12 @@ fun RecordScreen(nav: NavHostController) {
 
             // Start/Pause button
             AppButton(
-                text = if (status == RecordingStatus.Start) stringResource(Res.string.pause) else stringResource(Res.string.start),
+                text = if (status == RecordingStatus.Start) stringResource(Res.string.pause) else stringResource(
+                    Res.string.start
+                ),
                 onClick = {
-                    status = if (status == RecordingStatus.Start) RecordingStatus.Pause else RecordingStatus.Start
+                    status =
+                        if (status == RecordingStatus.Start) RecordingStatus.Pause else RecordingStatus.Start
                 },
                 modifier = Modifier.fillMaxWidth()
             )

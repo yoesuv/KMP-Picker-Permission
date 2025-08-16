@@ -76,7 +76,7 @@ fun HomeScreen(nav: NavHostController) {
                 AppButton(
                     text = stringResource(Res.string.record_audio),
                     onClick = {
-                        // TODO: Setup record audio functionality
+                        nav.navigate(AppRoute.Record)
                     },
                     modifier = Modifier.padding(bottom = BUTTON_BOTTOM_PADDING)
                 )
