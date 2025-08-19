@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.is_recording
 import kmppickerpermission.composeapp.generated.resources.pause
@@ -32,6 +37,20 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RecordScreen(nav: NavHostController) {
     var status by remember { mutableStateOf(RecordingStatus.Stop) }
+
+    // Permissions controller & VM like LocationScreen
+    val permissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController = remember(permissionsControllerFactory) {
+        permissionsControllerFactory.createPermissionsController()
+    }
+
+    BindEffect(permissionsController)
+
+    val viewModel: RecordViewModel = viewModel(
+        factory = RecordViewModelFactory.create(permissionsController)
+    )
+
+    val permissionState by viewModel.permissionState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -76,8 +95,27 @@ fun RecordScreen(nav: NavHostController) {
                     Res.string.start
                 ),
                 onClick = {
-                    status =
-                        if (status == RecordingStatus.Start) RecordingStatus.Pause else RecordingStatus.Start
+                    if (status == RecordingStatus.Start) {
+                        // Pause doesn't need mic permission
+                        status = RecordingStatus.Pause
+                    } else {
+                        // Starting recording: ensure mic permission
+                        when (permissionState) {
+                            PermissionState.Granted -> {
+                                status = RecordingStatus.Start
+                            }
+
+                            PermissionState.Denied, PermissionState.DeniedAlways -> {
+                                viewModel.openAppSettings()
+                            }
+
+                            else -> {
+                                viewModel.requestMicrophonePermission {
+                                    status = RecordingStatus.Start
+                                }
+                            }
+                        }
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
