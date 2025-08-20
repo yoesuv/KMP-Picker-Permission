@@ -27,7 +27,6 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.is_recording
-import kmppickerpermission.composeapp.generated.resources.pause
 import kmppickerpermission.composeapp.generated.resources.record_audio
 import kmppickerpermission.composeapp.generated.resources.start
 import kmppickerpermission.composeapp.generated.resources.stop
@@ -70,7 +69,6 @@ fun RecordScreen(nav: NavHostController) {
         ) {
             val statusLabel = when (status) {
                 RecordingStatus.Start -> stringResource(Res.string.start)
-                RecordingStatus.Pause -> stringResource(Res.string.pause)
                 RecordingStatus.Stop -> stringResource(Res.string.stop)
             }
             // Status text
@@ -89,15 +87,15 @@ fun RecordScreen(nav: NavHostController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Start/Pause button
+            // Start/Stop button
             AppButton(
-                text = if (status == RecordingStatus.Start) stringResource(Res.string.pause) else stringResource(
+                text = if (status == RecordingStatus.Start) stringResource(Res.string.stop) else stringResource(
                     Res.string.start
                 ),
                 onClick = {
                     if (status == RecordingStatus.Start) {
-                        // Pause doesn't need mic permission
-                        status = RecordingStatus.Pause
+                        // Stop recording
+                        status = RecordingStatus.Stop
                     } else {
                         // Starting recording: ensure mic permission
                         when (permissionState) {
@@ -119,20 +117,11 @@ fun RecordScreen(nav: NavHostController) {
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Stop button
-            AppButton(
-                text = stringResource(Res.string.stop),
-                onClick = { status = RecordingStatus.Stop },
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
 
 private enum class RecordingStatus {
     Start,
-    Pause,
     Stop
 }
