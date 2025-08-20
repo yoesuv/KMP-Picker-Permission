@@ -30,12 +30,37 @@ import kmppickerpermission.composeapp.generated.resources.is_recording
 import kmppickerpermission.composeapp.generated.resources.record_audio
 import kmppickerpermission.composeapp.generated.resources.start
 import kmppickerpermission.composeapp.generated.resources.stop
-import kmppickerpermission.composeapp.generated.resources.timer_default
 import org.jetbrains.compose.resources.stringResource
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 
 @Composable
 fun RecordScreen(nav: NavHostController) {
     var status by remember { mutableStateOf(RecordingStatus.Stop) }
+    var counter by remember { mutableStateOf(0) }
+
+    // Timer formatting function
+    fun formatTime(seconds: Int): String {
+        val minutes = seconds / 60
+        val remainingSeconds = seconds % 60
+        return "${minutes.toString().padStart(2, '0')}:${
+            remainingSeconds.toString().padStart(2, '0')
+        }"
+    }
+
+    // Timer effect
+    LaunchedEffect(status) {
+        if (status == RecordingStatus.Start) {
+            // Reset counter only when starting
+            counter = 0
+            while (status == RecordingStatus.Start) {
+                delay(1000) // Update every second
+                counter++
+            }
+        }
+        // When stopping, we don't reset the counter
+        // It will retain its value until a new start
+    }
 
     // Permissions controller & VM like LocationScreen
     val permissionsControllerFactory = rememberPermissionsControllerFactory()
@@ -79,9 +104,9 @@ fun RecordScreen(nav: NavHostController) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Timer display (static as requested)
+            // Timer display
             Text(
-                text = stringResource(Res.string.timer_default),
+                text = formatTime(counter),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
