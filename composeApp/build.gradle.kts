@@ -65,6 +65,7 @@ kotlin {
             implementation(libs.moko.permissions.microphone)
             implementation(libs.compass.geolocation)
             implementation(libs.compass.geolocation.mobile)
+            implementation(libs.kmp.record.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

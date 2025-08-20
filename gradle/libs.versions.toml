@@ -10,7 +10,6 @@ androidx-core = "1.16.0"
 androidx-espresso = "3.6.1"
 androidx-lifecycle = "2.9.1"
 androidx-testExt = "1.2.1"
-calf = "0.8.0"
 coil = "3.3.0"
 compass = "2.3.1"
 composeMultiplatform = "1.8.2"
@@ -23,6 +22,7 @@ ktor = "3.2.2"
 navigation = "2.9.0-beta03"
 mokoPermissions = "0.19.1"
 material-icons-extended = "1.7.3"
+record= "0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -52,6 +52,7 @@ moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", ve
 moko-permissions-location = { module = "dev.icerock.moko:permissions-location", version.ref = "mokoPermissions" }
 moko-permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "mokoPermissions" }
 moko-permissions-microphone = { module = "dev.icerock.moko:permissions-microphone", version.ref = "mokoPermissions" }
+kmp-record-core = { module = "dev.theolm.record:record-core", version.ref = "record" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

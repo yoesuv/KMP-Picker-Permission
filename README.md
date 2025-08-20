@@ -12,6 +12,7 @@
 - [Coil](https://coil-kt.github.io/coil/)
 - [Compass](https://github.com/jordond/compass)
 - [FileKit](https://github.com/vinceglb/FileKit)
+- [Kmp Record](https://github.com/theolm/kmp-record)
 - [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)
 - [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)
 - [Ktor](https://ktor.io/)
