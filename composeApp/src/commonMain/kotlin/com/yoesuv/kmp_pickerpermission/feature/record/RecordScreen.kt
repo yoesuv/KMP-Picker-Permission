@@ -36,7 +36,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun RecordScreen(nav: NavHostController) {
-    var status by remember { mutableStateOf(RecordingStatus.Stop) }
+    // Recording state driven by ViewModel
     var counter by remember { mutableStateOf(0) }
 
     // Timer formatting function
@@ -49,18 +49,8 @@ fun RecordScreen(nav: NavHostController) {
     }
 
     // Timer effect
-    LaunchedEffect(status) {
-        if (status == RecordingStatus.Start) {
-            // Reset counter only when starting
-            counter = 0
-            while (status == RecordingStatus.Start) {
-                delay(1000) // Update every second
-                counter++
-            }
-        }
-        // When stopping, we don't reset the counter
-        // It will retain its value until a new start
-    }
+    // We'll key this effect by isRecording when we have the ViewModel instance below
+    // The effect body moved after collecting state
 
     // Permissions controller & VM like LocationScreen
     val permissionsControllerFactory = rememberPermissionsControllerFactory()
@@ -75,6 +65,20 @@ fun RecordScreen(nav: NavHostController) {
     )
 
     val permissionState by viewModel.permissionState.collectAsState()
+    val isRecording by viewModel.isRecording.collectAsState()
+
+    LaunchedEffect(isRecording) {
+        if (isRecording) {
+            // Reset counter only when starting
+            counter = 0
+            while (isRecording) {
+                delay(1000) // Update every second
+                counter++
+            }
+        }
+        // When stopping, we don't reset the counter
+        // It will retain its value until a new start
+    }
 
     Scaffold(
         topBar = {
@@ -92,10 +96,8 @@ fun RecordScreen(nav: NavHostController) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val statusLabel = when (status) {
-                RecordingStatus.Start -> stringResource(Res.string.start)
-                RecordingStatus.Stop -> stringResource(Res.string.stop)
-            }
+            val statusLabel =
+                if (isRecording) stringResource(Res.string.start) else stringResource(Res.string.stop)
             // Status text
             Text(
                 text = stringResource(Res.string.is_recording, statusLabel),
@@ -114,18 +116,18 @@ fun RecordScreen(nav: NavHostController) {
 
             // Start/Stop button
             AppButton(
-                text = if (status == RecordingStatus.Start) stringResource(Res.string.stop) else stringResource(
+                text = if (isRecording) stringResource(Res.string.stop) else stringResource(
                     Res.string.start
                 ),
                 onClick = {
-                    if (status == RecordingStatus.Start) {
+                    if (isRecording) {
                         // Stop recording
-                        status = RecordingStatus.Stop
+                        viewModel.stopRecording()
                     } else {
                         // Starting recording: ensure mic permission
                         when (permissionState) {
                             PermissionState.Granted -> {
-                                status = RecordingStatus.Start
+                                viewModel.startRecording()
                             }
 
                             PermissionState.Denied, PermissionState.DeniedAlways -> {
@@ -133,20 +135,17 @@ fun RecordScreen(nav: NavHostController) {
                             }
 
                             else -> {
-                                viewModel.requestMicrophonePermission {
-                                    status = RecordingStatus.Start
-                                }
+                                viewModel.requestMicrophonePermission { viewModel.startRecording() }
                             }
                         }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(viewModel.lastSavedPath.value ?: "", fontSize = 12.sp)
         }
     }
 }
 
-private enum class RecordingStatus {
-    Start,
-    Stop
-}
