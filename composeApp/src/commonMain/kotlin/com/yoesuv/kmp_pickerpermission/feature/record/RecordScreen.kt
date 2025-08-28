@@ -33,6 +33,11 @@ import kmppickerpermission.composeapp.generated.resources.stop
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 
 @Composable
 fun RecordScreen(nav: NavHostController) {
@@ -144,8 +149,27 @@ fun RecordScreen(nav: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text(viewModel.lastSavedPath.value ?: "", fontSize = 12.sp)
+
+            // Only show the path and play/pause button when not recording
+            if (!isRecording) {
+                val path = viewModel.lastSavedPath.value ?: ""
+                if (path.isNotEmpty()) {
+                    Text(path, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Play/Pause button
+                    IconButton(
+                        onClick = {
+                            // TODO: Implement play/pause functionality
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play/Pause audio"
+                        )
+                    }
+                }
+            }
         }
     }
 }
-
