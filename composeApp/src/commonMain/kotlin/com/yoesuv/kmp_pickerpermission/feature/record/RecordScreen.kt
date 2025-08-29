@@ -35,10 +35,11 @@ import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayerState
+import eu.iamkonstantin.kotlin.gadulka.rememberGadulkaLiveState
 
 @Composable
 fun RecordScreen(nav: NavHostController) {
@@ -72,7 +73,7 @@ fun RecordScreen(nav: NavHostController) {
 
     val permissionState by viewModel.permissionState.collectAsState()
     val isRecording by viewModel.isRecording.collectAsState()
-    val isPlaying by viewModel.isPlaying.collectAsState()
+    val gadulka = rememberGadulkaLiveState()
 
     LaunchedEffect(isRecording) {
         if (isRecording) {
@@ -162,16 +163,16 @@ fun RecordScreen(nav: NavHostController) {
                     // Play/Stop button
                     IconButton(
                         onClick = {
-                            if (isPlaying) {
-                                viewModel.stopAudio()
+                            if (gadulka.state == GadulkaPlayerState.PLAYING) {
+                                viewModel.stopAudio(gadulka.player)
                             } else {
-                                viewModel.playAudio()
+                                viewModel.playAudio(gadulka.player)
                             }
                         }
                     ) {
                         Icon(
-                            imageVector = if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
-                            contentDescription = if (isPlaying) "Stop audio" else "Play audio"
+                            imageVector = if (gadulka.state == GadulkaPlayerState.PLAYING) Icons.Default.Stop else Icons.Default.PlayArrow,
+                            contentDescription = if (gadulka.state == GadulkaPlayerState.PLAYING) "Stop audio" else "Play audio"
                         )
                     }
                 }
