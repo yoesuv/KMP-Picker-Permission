@@ -11,8 +11,9 @@ import dev.icerock.moko.permissions.RequestCanceledException
 import dev.icerock.moko.permissions.microphone.RECORD_AUDIO
 import dev.theolm.record.Record
 import dev.theolm.record.config.OutputFormat
-import dev.theolm.record.config.OutputLocation
 import dev.theolm.record.config.RecordConfig
+import eu.iamkonstantin.kotlin.gadulka.GadulkaPlayer
+import kmppickerpermission.composeapp.generated.resources.Res
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,10 +35,17 @@ class RecordViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying.asStateFlow()
+
+    private val player = GadulkaPlayer()
+
     init {
-        Record.setConfig(RecordConfig(
-            outputFormat = OutputFormat.WAV,
-        ))
+        Record.setConfig(
+            RecordConfig(
+                outputFormat = OutputFormat.WAV,
+            )
+        )
         viewModelScope.launch {
             _permissionState.value =
                 permissionsController.getPermissionState(Permission.RECORD_AUDIO)
@@ -86,6 +94,7 @@ class RecordViewModel(
                 _isRecording.value = false
                 _lastSavedPath.value = savedPath
                 _error.value = null
+                println("Saved recording path: $savedPath")
             }.onFailure { throwable ->
                 _error.value = throwable.message ?: throwable.toString()
             }
@@ -95,5 +104,37 @@ class RecordViewModel(
     fun openAppSettings() {
         permissionsController.openAppSettings()
     }
-}
 
+    fun playAudio() {
+        if (!_isPlaying.value) {
+            _lastSavedPath.value?.let { path ->
+                println("Attempting to play audio from path: $path")
+                try {
+                    // For local files, we need to convert the path to a proper URL format
+                    // If the path doesn't start with a scheme, we need to add "file://" prefix
+                    val url = if (path.startsWith("http") || path.startsWith("file://")) {
+                        path
+                    } else {
+                        "file://$path"
+                    }
+                    println("Playing audio from URL: $url")
+                    player.play(url)
+                    _isPlaying.value = true
+                } catch (e: Exception) {
+                    println("Error playing audio: ${e.message}")
+                    _error.value = "Failed to play audio: ${e.message}"
+                }
+            } ?: run {
+                _error.value = "No recorded audio found"
+            }
+        }
+    }
+
+    fun stopAudio() {
+        if (_isPlaying.value) {
+            player.stop()
+            player.release()
+            _isPlaying.value = false
+        }
+    }
+}

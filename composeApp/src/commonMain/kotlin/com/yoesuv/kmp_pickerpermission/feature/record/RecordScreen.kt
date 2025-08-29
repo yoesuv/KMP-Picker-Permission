@@ -36,6 +36,7 @@ import kotlinx.coroutines.delay
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
@@ -71,6 +72,7 @@ fun RecordScreen(nav: NavHostController) {
 
     val permissionState by viewModel.permissionState.collectAsState()
     val isRecording by viewModel.isRecording.collectAsState()
+    val isPlaying by viewModel.isPlaying.collectAsState()
 
     LaunchedEffect(isRecording) {
         if (isRecording) {
@@ -157,15 +159,19 @@ fun RecordScreen(nav: NavHostController) {
                     Text(path, fontSize = 12.sp)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Play/Pause button
+                    // Play/Stop button
                     IconButton(
                         onClick = {
-                            // TODO: Implement play/pause functionality
+                            if (isPlaying) {
+                                viewModel.stopAudio()
+                            } else {
+                                viewModel.playAudio()
+                            }
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Play/Pause audio"
+                            imageVector = if (isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
+                            contentDescription = if (isPlaying) "Stop audio" else "Play audio"
                         )
                     }
                 }

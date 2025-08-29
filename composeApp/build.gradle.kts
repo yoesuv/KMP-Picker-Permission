@@ -66,6 +66,7 @@ kotlin {
             implementation(libs.compass.geolocation)
             implementation(libs.compass.geolocation.mobile)
             implementation(libs.kmp.record.core)
+            implementation(libs.gadulka)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
