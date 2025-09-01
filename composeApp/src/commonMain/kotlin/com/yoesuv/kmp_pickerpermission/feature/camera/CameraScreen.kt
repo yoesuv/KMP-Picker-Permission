@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -16,6 +18,9 @@ import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.camera
 import kmppickerpermission.composeapp.generated.resources.open_camera
@@ -23,9 +28,20 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CameraScreen(nav: NavHostController) {
-    val viewModel: CameraViewModel = viewModel(factory = CameraViewModelFactory.create())
-    val photoPath = viewModel.photoPath.collectAsState().value
-    val isLoading = viewModel.isLoading.collectAsState().value
+    val permissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController = remember(permissionsControllerFactory) {
+        permissionsControllerFactory.createPermissionsController()
+    }
+
+    BindEffect(permissionsController)
+
+    val viewModel: CameraViewModel = viewModel(
+        factory = CameraViewModelFactory.create(permissionsController)
+    )
+
+    val photoPath by viewModel.photoPath.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val permissionState by viewModel.permissionState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -58,7 +74,13 @@ fun CameraScreen(nav: NavHostController) {
             // Button to open camera
             AppButton(
                 text = stringResource(Res.string.open_camera),
-                onClick = { viewModel.takePhoto() },
+                onClick = {
+                    when (permissionState) {
+                        PermissionState.Granted -> viewModel.takePhoto()
+                        PermissionState.Denied, PermissionState.DeniedAlways -> viewModel.openAppSettings()
+                        else -> viewModel.requestCameraPermission { viewModel.takePhoto() }
+                    }
+                },
                 loading = isLoading,
                 modifier = Modifier.fillMaxWidth()
             )

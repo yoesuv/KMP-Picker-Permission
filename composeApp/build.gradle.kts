@@ -63,6 +63,7 @@ kotlin {
             implementation(libs.moko.permissions.location)
             implementation(libs.moko.permissions.notifications)
             implementation(libs.moko.permissions.microphone)
+            implementation(libs.moko.permissions.camera)
             implementation(libs.compass.geolocation)
             implementation(libs.compass.geolocation.mobile)
             implementation(libs.kmp.record.core)
