@@ -1,6 +1,6 @@
 ## KMP Picker Permission ##
 
-:construction: Work in Progress
+Sample kotlin multiplatform app to handle permission and various picker.
 
 #### Screenshots Android ####
 | ![](https://i.imgur.com/ncKxlB7.jpeg) | ![](https://i.imgur.com/9ni63Nl.jpeg) | ![](https://i.imgur.com/DH1jlh1.jpeg) | ![](https://i.imgur.com/L1qDzYQ.jpeg) |
@@ -13,7 +13,7 @@
 | ![](https://i.imgur.com/bxkntrf.png) | ![](https://i.imgur.com/c6FHYOL.png) | ![](https://i.imgur.com/P9CG3QP.png) | ![](https://i.imgur.com/TrT2yzS.png) |
 | :---: | :---: | :---: | :---: |
 | - | ![](https://i.imgur.com/UuGxC9R.png) | ![](https://i.imgur.com/Y4ks6cp.png) | ![](https://i.imgur.com/n8zJ5G4.png) |
-| - | - | ![](https://i.imgur.com/Sveh54c.png) | ![](https://i.imgur.com/NQF7INU.png) |
+| ![](https://i.imgur.com/ZNR8sUC.png) | ![](https://i.imgur.com/S0IBmso.png) | ![](https://i.imgur.com/Sveh54c.png) | ![](https://i.imgur.com/NQF7INU.png) |
 | ![](https://i.imgur.com/Z5NFM0I.png) | ![](https://i.imgur.com/huvOEOg.png) | ![](https://i.imgur.com/afhBfTs.png) | - |
 
 #### List Library ####
