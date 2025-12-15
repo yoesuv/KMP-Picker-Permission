@@ -21,9 +21,6 @@ import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
 import com.yoesuv.kmp_pickerpermission.components.AppTimePicker
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
-import com.yoesuv.kmp_pickerpermission.getCurrentPlatform
-import com.yoesuv.kmp_pickerpermission.isAndroid
-import com.yoesuv.kmp_pickerpermission.platform.pickDate
 import com.yoesuv.kmp_pickerpermission.utils.formatDateFromMillis
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.date_picker
@@ -39,8 +36,6 @@ fun DateTimeScreen(nav: NavHostController) {
     var selectedTime by remember { mutableStateOf<String?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
-
-    val currentPlatform = getCurrentPlatform()
 
     Scaffold(
         topBar = {
@@ -77,14 +72,7 @@ fun DateTimeScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.date_picker),
                 onClick = {
-                    if (currentPlatform.isAndroid) {
-                        showDatePicker = true
-                    } else {
-                        // iOS: Use native date picker
-                        pickDate { dateMillis ->
-                            selectedDateMillis = dateMillis
-                        }
-                    }
+                    showDatePicker = true
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -113,19 +101,16 @@ fun DateTimeScreen(nav: NavHostController) {
         }
     }
 
-    // Only show AppDatePicker on Android
-    if (currentPlatform.isAndroid) {
-        AppDatePicker(
-            showDatePicker = showDatePicker,
-            onDateSelected = { dateMillis ->
-                selectedDateMillis = dateMillis
-                showDatePicker = false
-            },
-            onDismiss = {
-                showDatePicker = false
-            }
-        )
-    }
+    AppDatePicker(
+        showDatePicker = showDatePicker,
+        onDateSelected = { dateMillis ->
+            selectedDateMillis = dateMillis
+            showDatePicker = false
+        },
+        onDismiss = {
+            showDatePicker = false
+        }
+    )
 
     // AppTimePicker for all platforms
     AppTimePicker(
@@ -136,7 +121,6 @@ fun DateTimeScreen(nav: NavHostController) {
             val paddedHour = hour.toString().padStart(2, '0')
             val paddedMinute = minute.toString().padStart(2, '0')
             selectedTime = "$paddedHour:$paddedMinute"
-            showTimePicker = false
         },
         onDismiss = {
             showTimePicker = false
