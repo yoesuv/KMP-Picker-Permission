@@ -8,14 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppDatePicker
@@ -32,10 +31,14 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DateTimeScreen(nav: NavHostController) {
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
-    var selectedTime by remember { mutableStateOf<String?>(null) }
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
+    val viewModel: DateTimeViewModel = viewModel(
+        factory = DateTimeViewModelFactory.create()
+    )
+
+    val selectedDateMillis by viewModel.selectedDateMillis.collectAsState()
+    val selectedTime by viewModel.selectedTime.collectAsState()
+    val showDatePicker by viewModel.showDatePicker.collectAsState()
+    val showTimePicker by viewModel.showTimePicker.collectAsState()
 
     Scaffold(
         topBar = {
@@ -72,7 +75,7 @@ fun DateTimeScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.date_picker),
                 onClick = {
-                    showDatePicker = true
+                    viewModel.showDatePicker()
                 }
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -95,7 +98,7 @@ fun DateTimeScreen(nav: NavHostController) {
             AppButton(
                 text = stringResource(Res.string.time_picker),
                 onClick = {
-                    showTimePicker = true
+                    viewModel.showTimePicker()
                 }
             )
         }
@@ -104,11 +107,11 @@ fun DateTimeScreen(nav: NavHostController) {
     AppDatePicker(
         showDatePicker = showDatePicker,
         onDateSelected = { dateMillis ->
-            selectedDateMillis = dateMillis
-            showDatePicker = false
+            viewModel.onDateSelected(dateMillis)
+            viewModel.dismissDatePicker()
         },
         onDismiss = {
-            showDatePicker = false
+            viewModel.dismissDatePicker()
         }
     )
 
@@ -116,14 +119,11 @@ fun DateTimeScreen(nav: NavHostController) {
     AppTimePicker(
         showTimePicker = showTimePicker,
         onTimeSelected = { hour, minute ->
-            println("Time selected - Hour: $hour, Minute: $minute")
-            // Format time as HH:MM in 24-hour format
-            val paddedHour = hour.toString().padStart(2, '0')
-            val paddedMinute = minute.toString().padStart(2, '0')
-            selectedTime = "$paddedHour:$paddedMinute"
+            viewModel.onTimeSelected(hour, minute)
+            viewModel.dismissTimePicker()
         },
         onDismiss = {
-            showTimePicker = false
+            viewModel.dismissTimePicker()
         }
     )
 }
