@@ -123,5 +123,6 @@ class AndroidFileDownloader(
 
     companion object {
         private const val DEFAULT_FILE_NAME = "downloaded_file"
+        private const val DEFAULT_BUFFER_SIZE = 8192
     }
 }
