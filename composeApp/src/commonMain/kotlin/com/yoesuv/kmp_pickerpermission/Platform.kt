@@ -12,6 +12,13 @@ expect fun getCurrentPlatform(): Platform
  */
 expect fun isNotificationPermissionRequired(): Boolean
 
+/**
+ * Checks if the current platform requires WRITE_EXTERNAL_STORAGE permission for downloads.
+ * Returns true only on Android versions below 10 (API < 29).
+ * Returns false on Android 10+ (scoped storage) and iOS.
+ */
+expect fun isStoragePermissionRequired(): Boolean
+
 val Platform.isAndroid: Boolean
     get() = this == Platform.ANDROID
 

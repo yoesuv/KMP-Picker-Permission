@@ -6,3 +6,8 @@ actual fun getCurrentPlatform(): Platform = Platform.IOS
  * On iOS, notification permission is always required
  */
 actual fun isNotificationPermissionRequired(): Boolean = true
+
+/**
+ * On iOS, no storage permission is needed for downloads
+ */
+actual fun isStoragePermissionRequired(): Boolean = false
