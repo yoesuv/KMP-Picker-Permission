@@ -15,10 +15,8 @@ import com.yoesuv.kmp_pickerpermission.feature.location.LocationScreen
 import com.yoesuv.kmp_pickerpermission.feature.notification.NotificationScreen
 import com.yoesuv.kmp_pickerpermission.feature.download.DownloadScreen
 import com.yoesuv.kmp_pickerpermission.feature.record.RecordScreen
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
         val navController = rememberNavController()

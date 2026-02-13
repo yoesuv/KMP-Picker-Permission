@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,16 +20,28 @@ import androidx.navigation.NavHostController
 import com.yoesuv.kmp_pickerpermission.components.AppButton
 import com.yoesuv.kmp_pickerpermission.components.AppTopBar
 import com.yoesuv.kmp_pickerpermission.download.DownloadStatus
+import com.yoesuv.kmp_pickerpermission.isStoragePermissionRequired
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kmppickerpermission.composeapp.generated.resources.Res
 import kmppickerpermission.composeapp.generated.resources.download_file
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DownloadScreen(nav: NavHostController) {
+    val permissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController = remember(permissionsControllerFactory) {
+        permissionsControllerFactory.createPermissionsController()
+    }
+
+    BindEffect(permissionsController)
+
     val viewModel: DownloadViewModel = viewModel(
-        factory = DownloadViewModelFactory.create()
+        factory = DownloadViewModelFactory.create(permissionsController)
     )
     val status by viewModel.status.collectAsState()
+    val permissionState by viewModel.permissionState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -60,7 +73,17 @@ fun DownloadScreen(nav: NavHostController) {
 
             AppButton(
                 text = stringResource(Res.string.download_file),
-                onClick = { viewModel.onDownloadClicked() },
+                onClick = {
+                    if (!isStoragePermissionRequired()) {
+                        viewModel.onDownloadClicked()
+                    } else {
+                        when (permissionState) {
+                            PermissionState.Granted -> viewModel.onDownloadClicked()
+                            PermissionState.Denied, PermissionState.DeniedAlways -> viewModel.openAppSettings()
+                            else -> viewModel.requestStoragePermission { viewModel.onDownloadClicked() }
+                        }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }

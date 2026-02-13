@@ -64,6 +64,7 @@ kotlin {
             implementation(libs.moko.permissions.notifications)
             implementation(libs.moko.permissions.microphone)
             implementation(libs.moko.permissions.camera)
+            implementation(libs.moko.permissions.storage)
             implementation(libs.compass.geolocation)
             implementation(libs.compass.geolocation.mobile)
             implementation(libs.kmp.record.core)
@@ -84,7 +85,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0.1"
+        versionName = "1.0.2"
         setProperty("archivesBaseName", "$applicationId-v($versionName)")
     }
     packaging {
@@ -93,8 +94,15 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
+        getByName("debug") {
             isMinifyEnabled = false
+        }
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {

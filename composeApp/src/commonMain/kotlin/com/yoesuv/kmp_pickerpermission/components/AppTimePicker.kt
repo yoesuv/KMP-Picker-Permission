@@ -19,7 +19,7 @@ fun AppTimePicker(
     dismissButtonText: String = "Cancel",
     modifier: Modifier = Modifier
 ) {
-    val timePickerState = rememberTimePickerState()
+    val timePickerState = rememberTimePickerState(is24Hour = true)
 
     if (showTimePicker) {
         AlertDialog(
