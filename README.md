@@ -14,7 +14,7 @@ Sample kotlin multiplatform app to handle permission and various picker.
 | :---: | :---: | :---: | :---: |
 | - | ![](https://i.imgur.com/UuGxC9R.png) | ![](https://i.imgur.com/Y4ks6cp.png) | ![](https://i.imgur.com/n8zJ5G4.png) |
 | ![](https://i.imgur.com/ZNR8sUC.png) | ![](https://i.imgur.com/S0IBmso.png) | ![](https://i.imgur.com/Sveh54c.png) | ![](https://i.imgur.com/NQF7INU.png) |
-| ![](https://i.imgur.com/Z5NFM0I.png) | ![](https://i.imgur.com/huvOEOg.png) | ![](https://i.imgur.com/afhBfTs.png) | - |
+| ![](https://i.imgur.com/Z5NFM0I.png) | ![](https://i.imgur.com/Lv8RZPB.png) | ![](https://i.imgur.com/afhBfTs.png) | - |
 
 #### List Library ####
 - [Coil](https://coil-kt.github.io/coil/)
